@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="left_menu">
+        <item>Maintenance</item>
+        <item>Notification Settings</item>
+        <item>Change Password</item>
+        <item>Terms and Condition</item>
+        <item>Privacy Policy</item>
+        <item>Contact us</item>
+        <item>Logout</item>
+    </string-array>
+
+    <string-array name="car_make">
+        <item>Make</item>
+        <item>Honda</item>
+        <item>Hyundai</item>
+        <item>Audi</item>
+        <item>Mercedese</item>
+        <item>Maruti Suzuki</item>
+        <item>Ford</item>
+        <item>Wolksvagen</item>
+        <item>Fiat</item>
+        <item>Scoda</item>
+    </string-array>
+
+    <string-array name="model">
+        <item>Model</item>
+        <item>City</item>
+        <item>Ritz</item>
+        <item>Palio</item>
+        <item>Benz</item>
+        <item>EcoSportz</item>
+        <item>City</item>
+        <item>Octavia</item>
+        <item>Rapid</item>
+    </string-array>
+
+    <string-array name="gender">
+        <item>Male</item>
+        <item>Female</item>
+        <item>Other</item>
+    </string-array>
+</resources>
