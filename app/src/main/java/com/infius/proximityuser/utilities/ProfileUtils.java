@@ -8,7 +8,7 @@ import com.infius.proximityuser.activities.HomeActivity;
 
 public class ProfileUtils {
     public static String getUserName(Context context) {
-        return "Kshemendra";
+        return "Anil Sharma";
     }
 
     public static String getPropertyName(Context context) {

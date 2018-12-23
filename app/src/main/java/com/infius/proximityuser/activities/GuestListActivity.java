@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -13,16 +14,17 @@ import com.android.volley.VolleyError;
 import com.infius.proximityuser.R;
 import com.infius.proximityuser.adapters.PrimaryGuestAdapter;
 import com.infius.proximityuser.model.DataModel;
+import com.infius.proximityuser.model.Guest;
 import com.infius.proximityuser.model.GuestHistoryModel;
 import com.infius.proximityuser.utilities.ApiRequestHelper;
 import com.infius.proximityuser.utilities.AppConstants;
 import com.infius.proximityuser.utilities.Utils;
 
-public class GuestListActivity extends AppCompatActivity {
+public class GuestListActivity extends AppCompatActivity implements View.OnClickListener {
 
     int mType;
     private Dialog mProgressDialog;
-    private ImageView backBtn;
+    private ImageView backBtn, emptyList;
     private RecyclerView recyclerView;
 
     @Override
@@ -40,6 +42,8 @@ public class GuestListActivity extends AppCompatActivity {
         backBtn = (ImageView) findViewById(R.id.back_btn);
         recyclerView = (RecyclerView) findViewById(R.id.guest_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(GuestListActivity.this));
+        emptyList = (ImageView) findViewById(R.id.empty_list_illustration);
+        backBtn.setOnClickListener(this);
     }
 
     private void fetchGuestList() {
@@ -47,16 +51,25 @@ public class GuestListActivity extends AppCompatActivity {
         ApiRequestHelper.requestGuestList(this, getParamName(), new Response.Listener<DataModel>() {
             @Override
             public void onResponse(DataModel response) {
+                boolean error = false;
                 if (response instanceof GuestHistoryModel) {
                     hideProgressDialog();
                     if (AppConstants.STATUS_SUCCESS.equalsIgnoreCase(((GuestHistoryModel) response).getStatus())) {
                         setData((GuestHistoryModel) response);
+                    } else {
+                        error = true;
                     }
+                } else {
+                    error = true;
+                }
+                if (error) {
+                    emptyList.setVisibility(View.GONE);
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                emptyList.setVisibility(View.VISIBLE);
                 hideProgressDialog();
                 if (error != null) {
                     Toast.makeText(GuestListActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
@@ -66,8 +79,12 @@ public class GuestListActivity extends AppCompatActivity {
     }
 
     private void setData(GuestHistoryModel response) {
-        PrimaryGuestAdapter adapter = new PrimaryGuestAdapter(GuestListActivity.this, response.getGuestsList());
-        recyclerView.setAdapter(adapter);
+        if (response.getGuestsList().size() > 0) {
+            PrimaryGuestAdapter adapter = new PrimaryGuestAdapter(GuestListActivity.this, response.getGuestsList());
+            recyclerView.setAdapter(adapter);
+        } else {
+            emptyList.setVisibility(View.VISIBLE);
+        }
     }
 
     private String getParamName() {
@@ -103,6 +120,13 @@ public class GuestListActivity extends AppCompatActivity {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view.getId() == R.id.back_btn) {
+            GuestListActivity.this.finish();
         }
     }
 }

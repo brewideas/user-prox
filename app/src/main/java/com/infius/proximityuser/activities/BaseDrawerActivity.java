@@ -118,8 +118,7 @@ public abstract class BaseDrawerActivity extends AppCompatActivity implements Vi
         }
 
         if (!TextUtils.isEmpty(userName)) {
-            profileName.setText(userName);
-        }
+            profileName.setText(userName);       }
 
         if (!TextUtils.isEmpty(propertyName)) {
             property.setVisibility(View.VISIBLE);
