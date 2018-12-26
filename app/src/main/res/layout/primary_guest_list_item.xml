@@ -27,24 +27,24 @@
             android:id="@+id/guest_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textColor="#424242"/>
+            android:textSize="@dimen/font_size"
+            android:textColor="@color/textList"/>
 
         <TextView
             android:id="@+id/guest_mobile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:textSize="14sp"
-            android:textColor="#757575"/>
+            android:textSize="@dimen/listtextSize"
+            android:textColor="@color/textListlightColor"/>
 
         <TextView
             android:id="@+id/guest_email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:textSize="14sp"
-            android:textColor="#757575"/>
+            android:textSize="@dimen/listtextSize"
+            android:textColor="@color/textListlightColor"/>
 
     </LinearLayout>
 

@@ -14,6 +14,15 @@
         <item name="android:background">@color/white</item>
     </style>
 
+    <!-- InfiusSynergy application theme. -->
+    <style name="InfiusSynergyAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/infiusColorPrimary</item>
+        <item name="colorPrimaryDark">@color/infiuscolorPrimaryDark</item>
+        <item name="colorAccent">@color/infiuscolorAccent</item>
+    </style>
+
+
     <style name="DisabledTextInputEditText">
         <item name="android:enabled">false</item>
         <item name="android:focusable">false</item>
@@ -28,6 +37,14 @@
         <item name="colorControlNormal">#828282</item>
         <item name="colorControlActivated">#475ae8</item>
         <item name="colorControlHighlight">#475ae8</item>
+    </style>
+
+    <style name="InfiusSynergyEditTextTheme">
+        <item name="android:textColorHint">#424242</item>
+        <item name="colorAccent">@color/infiuscolorAccent</item>
+        <item name="colorControlNormal">#828282</item>
+        <item name="colorControlActivated">@color/infiuscolorAccent</item>
+        <item name="colorControlHighlight">@color/infiuscolorPrimaryDark</item>
     </style>
 
 </resources>

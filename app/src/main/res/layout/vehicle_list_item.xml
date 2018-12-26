@@ -15,7 +15,7 @@
             android:id="@+id/car_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
+            android:textSize="@dimen/listtextSize"
             android:textColor="#424242"
             android:text="@string/preferred_guest"/>
 

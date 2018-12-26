@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
+    android:background="@color/infiusColorPrimary"
     android:orientation="vertical">
 
     <com.infius.proximityuser.custom.CircularImageView
@@ -22,8 +22,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
         android:text="Good Morning Nikhil"
-        android:textColor="#ffffff"
-        android:textSize="16sp" />
+        android:textColor="@color/textColor"
+        android:textSize="@dimen/font_size" />
 
     <TextView
         android:id="@+id/property_number_home"
@@ -32,8 +32,8 @@
         android:layout_below="@id/greeting"
         android:layout_centerHorizontal="true"
         android:text="Q-803 (Owner)"
-        android:textColor="#b5bbed"
-        android:textSize="14sp" />
+        android:textColor="@color/textSubTitle"
+        android:textSize="@dimen/smallTextSize" />
 
     <TextView
         android:id="@+id/add_guest_btn"
@@ -88,15 +88,15 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/present_guests"
-                        android:textColor="#424242"
-                        android:textSize="16sp" />
+                        android:textColor="@color/textList"
+                        android:textSize="@dimen/font_size" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/present_guests_desc"
-                        android:textColor="#757575"
-                        android:textSize="12sp" />
+                        android:textColor="@color/textListlightColor"
+                        android:textSize="@dimen/smallTextSize" />
 
                 </LinearLayout>
 
@@ -142,15 +142,15 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/upcoming_guests"
-                        android:textColor="#424242"
-                        android:textSize="16sp" />
+                        android:textColor="@color/textList"
+                        android:textSize="@dimen/font_size" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/upcoming_guests_desc"
                         android:textColor="#757575"
-                        android:textSize="12sp" />
+                        android:textSize="@dimen/smallTextSize" />
 
                 </LinearLayout>
 
@@ -196,15 +196,15 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/preferred_guests"
-                        android:textColor="#424242"
-                        android:textSize="16sp" />
+                        android:textColor="@color/textList"
+                        android:textSize="@dimen/font_size" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/preferred_guests_desc"
-                        android:textColor="#757575"
-                        android:textSize="12sp" />
+                        android:textColor="@color/textListlightColor"
+                        android:textSize="@dimen/smallTextSize" />
 
                 </LinearLayout>
 
@@ -250,15 +250,15 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/history_guests"
-                        android:textColor="#424242"
-                        android:textSize="16sp" />
+                        android:textColor="@color/textList"
+                        android:textSize="@dimen/font_size" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/history_guests_desc"
-                        android:textColor="#757575"
-                        android:textSize="12sp" />
+                        android:textColor="@color/textListlightColor"
+                        android:textSize="@dimen/smallTextSize" />
 
                 </LinearLayout>
 
@@ -299,23 +299,24 @@
                     android:id="@+id/item_notice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="-6dp"
                     android:layout_toRightOf="@id/iv_notice"
-                    android:layout_centerVertical="true"
                     android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/notice_board"
-                        android:textColor="#424242"
-                        android:textSize="16sp" />
+                        android:textColor="@color/textList"
+                        android:textSize="@dimen/font_size" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/dummy_notice"
-                        android:textColor="#757575"
-                        android:textSize="12sp" />
+                        android:textColor="@color/textListlightColor"
+                        android:textSize="@dimen/smallTextSize" />
 
                 </LinearLayout>
 

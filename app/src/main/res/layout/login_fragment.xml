@@ -14,8 +14,8 @@
         android:layout_marginTop="50dp"
         android:gravity="center"
         android:text="@string/login_to_proximity"
-        android:textColor="#424242"
-        android:textSize="20sp" />
+        android:textColor="@color/textList"
+        android:textSize="@dimen/header_font" />
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/til_user_id"
@@ -101,30 +101,30 @@
     <TextView
         android:id="@+id/btn_login"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/button_height"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_gravity="center"
         android:layout_marginTop="30dp"
-        android:background="@drawable/send_btn_bg"
+        android:background="@color/buttonColor"
         android:gravity="center"
         android:text="@string/login"
-        android:textColor="#ffffff"
-        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_size"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/mock_login"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/button_height"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_gravity="center"
         android:layout_marginTop="30dp"
-        android:background="@drawable/send_btn_bg"
+        android:background="@color/buttonColor"
         android:gravity="center"
         android:text="@string/mock_login"
-        android:textColor="#ffffff"
+        android:textColor="@color/white"
         android:textSize="16sp"
         android:textStyle="bold" />
 
