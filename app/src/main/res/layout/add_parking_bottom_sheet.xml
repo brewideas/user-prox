@@ -205,7 +205,7 @@
         android:background="@color/buttonColor"
         android:gravity="center"
         android:text="@string/proceed"
-        android:textColor="@color/white"
+        android:textColor="@color/textColor"
         android:textSize="@dimen/font_size"
         android:textStyle="bold" />
 

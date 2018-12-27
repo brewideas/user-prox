@@ -109,7 +109,7 @@
         android:background="@color/buttonColor"
         android:gravity="center"
         android:text="@string/login"
-        android:textColor="@color/white"
+        android:textColor="@color/textColor"
         android:textSize="@dimen/font_size"
         android:textStyle="bold" />
 
@@ -124,7 +124,7 @@
         android:background="@color/buttonColor"
         android:gravity="center"
         android:text="@string/mock_login"
-        android:textColor="@color/white"
+        android:textColor="@color/textColor"
         android:textSize="16sp"
         android:textStyle="bold" />
 

@@ -38,7 +38,7 @@
                     android:layout_toRightOf="@id/back_btn"
                     android:padding="10dp"
                     android:text="@string/guest_list"
-                    android:textColor="@color/white"
+                    android:textColor="@color/textColor"
                     android:textSize="18sp"
                     android:textStyle="bold" />
             </RelativeLayout>
