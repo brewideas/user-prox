@@ -186,6 +186,18 @@ public class Utils {
         return prefs.getBoolean(AppConstants.SP_IS_LOGGEDIN, false);
     }
 
+    public static void saveString(Context context, String key, String value) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        prefs.edit().putString(key, value).commit();
+    }
+
+    public static String readString(Context context, String key) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getString(key, "");
+    }
+
+
+
     public static long diskCacheSizeBytes(File dir, long minSize) {
         long size = minSize;
         try {

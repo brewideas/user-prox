@@ -34,5 +34,6 @@ public interface AppConstants {
     String GUEST_LIST_PARAM_PREFERRED = "PREFERRED";
     String GUEST_LIST_PARAM_UPCOMING = "FUTURE";
     String GUEST_LIST_PARAM_PRESENT = "PRESENT";
+    String KEY_TOKEN = "token";
 }
 
