@@ -78,4 +78,8 @@
     <string name="enter_mobile_no">Please enter mobile number</string>
     <string name="enter_password">Please enter password</string>
     <string name="login_successfull">Login successful</string>
+    <string name="upload_photo">Upload Guest Photo (Optional)</string>
+    <string name="crop_image">Crop Image</string>
+    <string name="session_expire">Session Expire</string>
+    <string name="home">Go Home</string>
 </resources>

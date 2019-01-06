@@ -30,4 +30,6 @@ dependencies {
     api 'com.google.zxing:core:3.3.0'
     implementation project(':volley')
     implementation project(':gson-htc-fix-2.2.4')
+    implementation 'com.squareup.picasso:picasso:2.4.0'
+    implementation 'com.theartofdev.edmodo:android-image-cropper:2.5.+'
 }

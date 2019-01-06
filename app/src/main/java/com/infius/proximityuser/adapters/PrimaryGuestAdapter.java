@@ -13,6 +13,7 @@ import com.infius.proximityuser.custom.CircularImageView;
 import com.infius.proximityuser.listeners.VehicleRemoveListener;
 import com.infius.proximityuser.model.PrimaryGuest;
 import com.infius.proximityuser.model.Vehicle;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -43,11 +44,16 @@ public class PrimaryGuestAdapter extends RecyclerView.Adapter<PrimaryGuestAdapte
         String mobile = guest.getMobile();
         String gender = guest.getGender();
         String picUrl = guest.getGuestPic();
+        String thumbnail = guest.getGuestThumbnailPic();
+
         int age = guest.getAge();
 
         holder.guestName.setText(name + ", " + age + ", " + gender);
         holder.guestEmail.setText(email);
         holder.guestMobile.setText(mobile);
+        Picasso.with(context)
+                .load(thumbnail)
+                .into(holder.pic);
     }
 
     @Override
@@ -65,6 +71,7 @@ public class PrimaryGuestAdapter extends RecyclerView.Adapter<PrimaryGuestAdapte
             guestEmail = (TextView) itemView.findViewById(R.id.guest_email);
             guestMobile = (TextView) itemView.findViewById(R.id.guest_mobile);
             pic = (CircularImageView) itemView.findViewById(R.id.guest_pic);
+
         }
     }
 }

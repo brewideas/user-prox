@@ -18,6 +18,9 @@ public interface AppConstants {
 
     int REQUEST_CODE_PICK_CONTACT = 1001;
     int REQUEST_CODE_LOGIN = 1002;
+    int REQUEST_CODE_GALLARY = 1003;
+
+
     String SP_IS_LOGGEDIN = "is_logged_in";
     String SP_PROFILE_PIC_URL = "profile_pic";
     String STATUS_SUCCESS = "SUCCESS";
@@ -35,5 +38,6 @@ public interface AppConstants {
     String GUEST_LIST_PARAM_UPCOMING = "FUTURE";
     String GUEST_LIST_PARAM_PRESENT = "PRESENT";
     String KEY_TOKEN = "token";
+    String TOKEN_PREFIX = "Bearer ";
 }
 

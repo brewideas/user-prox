@@ -71,8 +71,13 @@ public class GuestListActivity extends AppCompatActivity implements View.OnClick
             public void onErrorResponse(VolleyError error) {
                 emptyList.setVisibility(View.VISIBLE);
                 hideProgressDialog();
-                if (error != null) {
-                    Toast.makeText(GuestListActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                if (error != null && error.networkResponse!=null) {
+                    String message = Utils.getErrorMessage(error);
+                    if (error.networkResponse.statusCode == 401) {
+                        Utils.handleSesionExpire(GuestListActivity.this, message);
+                    } else {
+                        Toast.makeText(GuestListActivity.this, message, Toast.LENGTH_LONG).show();
+                    }
                 }
             }
         });

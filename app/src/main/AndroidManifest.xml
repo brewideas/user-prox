@@ -25,6 +25,7 @@
         <activity android:name=".activities.HomeActivity"/>
         <activity android:name=".activities.AuthActivity"/>
         <activity android:name=".activities.GuestListActivity"/>
+        <activity android:name=".custom.MyCropImageActivity"/>
     </application>
 
 </manifest>

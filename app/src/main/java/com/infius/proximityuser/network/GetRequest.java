@@ -3,6 +3,7 @@ package com.infius.proximityuser.network;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
@@ -12,6 +13,7 @@ import com.android.volley.VolleyError;
 import com.google.gsonhtcfix.Gson;
 import com.infius.proximityuser.model.DataModel;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -89,5 +91,13 @@ public class GetRequest extends Request<DataModel> {
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
 
         return super.setRetryPolicy(retryPolicy);
+    }
+
+    @Override
+    public Map<String, String> getHeaders() throws AuthFailureError {
+        if (mHeaders == null) {
+            mHeaders = new HashMap<String, String>();
+        }
+        return mHeaders;
     }
 }

@@ -154,11 +154,16 @@ public class HomeActivity extends BaseDrawerActivity {
     @Override
     public void onItemClick(DrawerItem item) {
         if (item.getAction() == 1) {
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            prefs.edit().putBoolean(AppConstants.SP_IS_LOGGEDIN, false).commit();
+            Utils.logout(this);
             setProfilData();
             setData();
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setProfilData();
+        setData();
+    }
 }

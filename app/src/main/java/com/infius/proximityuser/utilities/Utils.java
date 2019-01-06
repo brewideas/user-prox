@@ -2,23 +2,31 @@ package com.infius.proximityuser.utilities;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Build;
 import android.os.StatFs;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Window;
 
+import com.android.volley.VolleyError;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
@@ -28,7 +36,10 @@ import com.infius.proximityuser.R;
 import com.infius.proximityuser.activities.AddGuestActivity;
 import com.infius.proximityuser.activities.AuthActivity;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -197,7 +208,6 @@ public class Utils {
     }
 
 
-
     public static long diskCacheSizeBytes(File dir, long minSize) {
         long size = minSize;
         try {
@@ -241,11 +251,88 @@ public class Utils {
 
         try {
             date = inputFormat.parse(dateInput);
-            str = outputFormat.format(date) + "T" + timeInput+".000";
+            str = outputFormat.format(date) + "T" + timeInput + ".000";
 //            str = outputFormat.format(date) + "T" + "04:24"+".000";
         } catch (ParseException e) {
             e.printStackTrace();
         }
         return str;
+    }
+
+    public static String getBase64Image(Context context, Uri selectedImage) {
+        String[] filePathColumn = {MediaStore.Images.Media.DATA};
+
+        // Get the cursor
+        Cursor cursor = context.getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+        // Move to first row
+        cursor.moveToFirst();
+
+        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+        String imgDecodableString = cursor.getString(columnIndex);
+        cursor.close();
+//        Bitmap bitmap =  BitmapFactory.decodeFile(imgDecodableString);
+
+        Bitmap bitmap = null;
+        try {
+            bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), selectedImage);
+            return getBase64Image(bitmap);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+    public static String getBase64Image(Bitmap bitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmap object
+        byte[] byteArrayImage = baos.toByteArray();
+        String encodedImage = Base64.encodeToString(byteArrayImage, Base64.NO_WRAP);
+        return encodedImage;
+    }
+
+    public static void logout(Activity activity) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        prefs.edit().putBoolean(AppConstants.SP_IS_LOGGEDIN, false).commit();
+        saveString(activity, AppConstants.KEY_TOKEN, "");
+
+        Intent intent = new Intent(activity, AuthActivity.class);
+        activity.startActivityForResult(intent, AppConstants.REQUEST_CODE_LOGIN);
+    }
+
+    public static String getErrorMessage(VolleyError error) {
+        String message = "Something went wrong";
+        if (error != null && error.networkResponse != null && error.networkResponse.data != null) {
+            try {
+                message = new String(error.networkResponse.data, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
+        return message;
+    }
+
+    public static void handleSesionExpire(final Activity activity, String message) {
+        AlertDialog.Builder builder;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder = new AlertDialog.Builder(activity, android.R.style.Theme_Material_Dialog_Alert);
+        } else {
+            builder = new AlertDialog.Builder(activity);
+        }
+        builder.setTitle(activity.getString(R.string.session_expire))
+                .setMessage(message)
+                .setPositiveButton(R.string.login, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        logout(activity);
+                        activity.finish();
+                    }
+                })
+                .setNegativeButton(R.string.home, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        activity.finish();
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 }

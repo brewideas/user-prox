@@ -6,10 +6,13 @@ import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.ContactsContract;
+import android.provider.MediaStore;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.TextInputEditText;
@@ -18,12 +21,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -36,6 +41,8 @@ import com.android.volley.VolleyError;
 import com.infius.proximityuser.R;
 import com.infius.proximityuser.adapters.OtherGuestAdapter;
 import com.infius.proximityuser.adapters.VehiclesAdapter;
+import com.infius.proximityuser.custom.CircularImageView;
+import com.infius.proximityuser.custom.MyCropImageActivity;
 import com.infius.proximityuser.listeners.GuestRemoveListener;
 import com.infius.proximityuser.listeners.VehicleRemoveListener;
 import com.infius.proximityuser.model.DataModel;
@@ -50,6 +57,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -77,6 +85,7 @@ public class AddGuestActivity extends AppCompatActivity implements View.OnClickL
     private RelativeLayout addParking;
     private RelativeLayout addOtherGuest;
     private TextView sendInvitation;
+    private LinearLayout uploadPic;
     private ImageView backBtn;
     private ImageView contactPicker;
     private ImageView datePicker;
@@ -84,6 +93,7 @@ public class AddGuestActivity extends AppCompatActivity implements View.OnClickL
     private ImageView outTimePicker;
     private Dialog mProgressDialog;
     private CheckBox mPreferredCheckbox;
+    CircularImageView displayPic;
 
 
     private boolean pickingInTime = true;
@@ -94,6 +104,8 @@ public class AddGuestActivity extends AppCompatActivity implements View.OnClickL
     private int mMinute;
     ArrayList<Vehicle> vehicles;
     ArrayList<Guest> otherGuests;
+    Uri selectedImage;
+    Bitmap bitmap;
 
     RecyclerView vehicleRecyclerView, guestRecyclerView;
 
@@ -117,6 +129,8 @@ public class AddGuestActivity extends AppCompatActivity implements View.OnClickL
         datePicker.setOnClickListener(this);
         inTimePicker.setOnClickListener(this);
         outTimePicker.setOnClickListener(this);
+        uploadPic.setOnClickListener(this);
+        displayPic.setOnClickListener(this);
     }
 
     private void initViews() {
@@ -142,6 +156,7 @@ public class AddGuestActivity extends AppCompatActivity implements View.OnClickL
         outTime = (TextInputEditText) findViewById(R.id.edit_out_time);
         tilOutTime = (TextInputLayout) findViewById(R.id.til_out_time);
 
+        uploadPic = (LinearLayout) findViewById(R.id.upload_pic);
         addParking = (RelativeLayout) findViewById(R.id.add_parking);
         addOtherGuest = (RelativeLayout) findViewById(R.id.add_other_guest);
         sendInvitation = (TextView) findViewById(R.id.btn_send_invitation);
@@ -156,6 +171,7 @@ public class AddGuestActivity extends AppCompatActivity implements View.OnClickL
 
         vehicleRecyclerView.setLayoutManager(new LinearLayoutManager(AddGuestActivity.this));
         guestRecyclerView.setLayoutManager(new LinearLayoutManager(AddGuestActivity.this));
+        displayPic = (CircularImageView) findViewById(R.id.display_selected_pic);
 
         setCurrentDate();
         updateDate();
@@ -203,6 +219,9 @@ public class AddGuestActivity extends AppCompatActivity implements View.OnClickL
             startActivityForResult(contactPickerIntent, AppConstants.REQUEST_CODE_PICK_CONTACT);
         } else if (v.getId() == R.id.back_btn) {
             onBackPressed();
+        } else if (v.getId() == R.id.upload_pic || v.getId() == R.id.display_selected_pic) {
+            Intent cropImageIntent = new Intent(this, MyCropImageActivity.class);
+            startActivityForResult(cropImageIntent, AppConstants.REQUEST_CODE_GALLARY);
         }
 
     }
@@ -397,9 +416,14 @@ public class AddGuestActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void onErrorResponse(VolleyError error) {
                 hideProgressDialog();
-//                if (error != null && error.getMessage().startsWith("4")) {
-                Toast.makeText(AddGuestActivity.this, "System Error : " + error.getMessage(), Toast.LENGTH_SHORT).show();
-//                }
+                if (error != null && error.networkResponse!=null) {
+                    String message = Utils.getErrorMessage(error);
+                    if (error.networkResponse.statusCode == 401) {
+                        Utils.handleSesionExpire(AddGuestActivity.this, message);
+                    } else {
+                        Toast.makeText(AddGuestActivity.this, message, Toast.LENGTH_LONG).show();
+                    }
+                }
             }
         });
 
@@ -418,6 +442,22 @@ public class AddGuestActivity extends AppCompatActivity implements View.OnClickL
 
             requestJson.put("expectedIn", Utils.getTimeStamp(dateOfArrival.getText().toString(), inTime.getText().toString()));
             requestJson.put("expectedOut", Utils.getTimeStamp(dateOfArrival.getText().toString(), outTime.getText().toString()));
+            if (selectedImage != null) {
+                String pic = Utils.getBase64Image(this, selectedImage);
+                if (!TextUtils.isEmpty(pic)) {
+                    requestJson.put("guestPic", pic);
+                    requestJson.put("imageContentType", "image/jpeg");
+                }
+            }
+
+            if (bitmap != null) {
+                String pic = Utils.getBase64Image(bitmap);
+                if (!TextUtils.isEmpty(pic)) {
+                    requestJson.put("guestPic", pic);
+                    requestJson.put("imageContentType", "image/jpeg");
+                }
+            }
+
             if (vehicles != null) {
                 JSONArray vehicleArr = new JSONArray();
                 for (Vehicle vehicle : vehicles) {
@@ -511,8 +551,14 @@ public class AddGuestActivity extends AppCompatActivity implements View.OnClickL
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == AppConstants.REQUEST_CODE_PICK_CONTACT) {
             contactPicked(data);
+        } if (resultCode == RESULT_OK && requestCode == AppConstants.REQUEST_CODE_GALLARY) {
+            bitmap = (Bitmap) data.getParcelableExtra("BitmapImage");
+            displayPic.setImageBitmap(bitmap);
+            displayPic.setVisibility(View.VISIBLE);
+            uploadPic.setVisibility(View.GONE);
         }
     }
+
 
     private void contactPicked(Intent data) {
         Cursor cursor = null;

@@ -135,9 +135,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onErrorResponse(VolleyError error) {
                 hideProgressDialog();
-//                if (error != null && error.getMessage().startsWith("4")) {
-                Toast.makeText(getActivity(), "System Error : " + error.getMessage(), Toast.LENGTH_SHORT).show();
-//                }
+                Toast.makeText(getActivity(), "System Error : " + Utils.getErrorMessage(error), Toast.LENGTH_SHORT).show();
             }
         });
     }
