@@ -27,8 +27,11 @@ import com.infius.proximityuser.listeners.AuthEventListener;
 import com.infius.proximityuser.model.AccessTokenModel;
 import com.infius.proximityuser.model.DataModel;
 import com.infius.proximityuser.model.InvitationModel;
+import com.infius.proximityuser.model.ProfileInfo;
+import com.infius.proximityuser.model.UserSessionDetails;
 import com.infius.proximityuser.utilities.ApiRequestHelper;
 import com.infius.proximityuser.utilities.AppConstants;
+import com.infius.proximityuser.utilities.ProfileUtils;
 import com.infius.proximityuser.utilities.Utils;
 
 public class LoginFragment extends Fragment implements View.OnClickListener {
@@ -125,9 +128,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             public void onResponse(DataModel response) {
                 hideProgressDialog();
                 if (response instanceof AccessTokenModel) {
-                    Toast.makeText(getActivity(), getString(R.string.login_successfull), Toast.LENGTH_SHORT).show();
                     Utils.saveString(getActivity(), AppConstants.KEY_TOKEN, ((AccessTokenModel) response).getAccess_token());
-                    listener.onLoginSuccess();
+                    fetchUserProfile();
                 }
 
             }
@@ -138,6 +140,35 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                 Toast.makeText(getActivity(), "System Error : " + Utils.getErrorMessage(error), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void fetchUserProfile() {
+        ApiRequestHelper.requestUserDetails(getActivity(), new Response.Listener<DataModel>() {
+            @Override
+            public void onResponse(DataModel response) {
+                hideProgressDialog();
+                if (response instanceof ProfileInfo && ((ProfileInfo) response).getUserSessionDetails()!=null) {
+                    UserSessionDetails profileDetails = ((ProfileInfo) response).getUserSessionDetails();
+                    if (AppConstants.ROLE_RESIDENT.equalsIgnoreCase(profileDetails.getPrimaryRole())) {
+                        Toast.makeText(getActivity(), getString(R.string.login_successfull), Toast.LENGTH_SHORT).show();
+                        ProfileUtils.saveProfileDetails(getActivity(), profileDetails);
+                        listener.onLoginSuccess();
+                    } else {
+                        Toast.makeText(getActivity(), "System Error : " + getString(R.string.not_authorized), Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                hideProgressDialog();
+                Utils.saveString(getActivity(), AppConstants.KEY_TOKEN, "");
+                Toast.makeText(getActivity(), "System Error : " + Utils.getErrorMessage(error), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
     }
 
     @Override

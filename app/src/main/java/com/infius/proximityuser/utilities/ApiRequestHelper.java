@@ -10,6 +10,7 @@ import com.infius.proximityuser.model.AccessTokenModel;
 import com.infius.proximityuser.model.DataModel;
 import com.infius.proximityuser.model.GuestHistoryModel;
 import com.infius.proximityuser.model.InvitationModel;
+import com.infius.proximityuser.model.ProfileInfo;
 import com.infius.proximityuser.network.GetRequest;
 import com.infius.proximityuser.network.PostRequest;
 import com.infius.proximityuser.network.VolleyManager;
@@ -63,6 +64,15 @@ public class ApiRequestHelper {
 
         header.put("authorization", "Basic "+ credBase64);
         PostRequest request = new PostRequest(url, listener, errorListener, new AccessTokenModel(), header, null);
+        VolleyManager.getRequestQueue(context).add(request);
+    }
+
+    public static void requestUserDetails(Context context, Response.Listener<DataModel> listener, Response.ErrorListener errorListener) {
+        String url = "http://34.231.195.192:9090/services/proximity/api/account/internal";
+        HashMap<String, String> header = new HashMap<>();
+        header.put("Authorization", AppConstants.TOKEN_PREFIX + Utils.readString(context, AppConstants.KEY_TOKEN));
+        header.put("content-type", "application/json");
+        GetRequest request = new GetRequest(Request.Method.GET, url, listener, errorListener, new ProfileInfo(), header, null);
         VolleyManager.getRequestQueue(context).add(request);
     }
 }

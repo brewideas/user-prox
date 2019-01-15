@@ -25,6 +25,7 @@ import com.infius.proximityuser.model.DrawerItem;
 import com.infius.proximityuser.utilities.AppConstants;
 import com.infius.proximityuser.utilities.ProfileUtils;
 import com.infius.proximityuser.utilities.Utils;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -113,16 +114,20 @@ public abstract class BaseDrawerActivity extends AppCompatActivity implements Vi
         String ownerShipType = ProfileUtils.getOwnershipType(BaseDrawerActivity.this);
         String propertyName = ProfileUtils.getPropertyName(BaseDrawerActivity.this);
 
-        if (ProfileUtils.getProfileImageUrl(BaseDrawerActivity.this).equalsIgnoreCase("mock")) {
-            profilePic.setImageResource(R.drawable.pic);
+        String url = ProfileUtils.getProfileImageUrl(BaseDrawerActivity.this);
+        if (!TextUtils.isEmpty(url)) {
+            Picasso.with(this)
+                    .load(url)
+                    .into(profilePic);
         }
 
         if (!TextUtils.isEmpty(userName)) {
-            profileName.setText(userName);       }
+            profileName.setText(userName);
+        }
 
         if (!TextUtils.isEmpty(propertyName)) {
             property.setVisibility(View.VISIBLE);
-            property.setText(propertyName + " (" + ownerShipType +  ")");
+            property.setText(propertyName + " (" + ownerShipType + ")");
         }
     }
 

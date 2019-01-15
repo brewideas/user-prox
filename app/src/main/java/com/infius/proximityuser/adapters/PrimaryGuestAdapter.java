@@ -3,6 +3,7 @@ package com.infius.proximityuser.adapters;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,9 +52,11 @@ public class PrimaryGuestAdapter extends RecyclerView.Adapter<PrimaryGuestAdapte
         holder.guestName.setText(name + ", " + age + ", " + gender);
         holder.guestEmail.setText(email);
         holder.guestMobile.setText(mobile);
-        Picasso.with(context)
-                .load(thumbnail)
-                .into(holder.pic);
+        if (!TextUtils.isEmpty(thumbnail)) {
+            Picasso.with(context)
+                    .load(thumbnail)
+                    .into(holder.pic);
+        }
     }
 
     @Override

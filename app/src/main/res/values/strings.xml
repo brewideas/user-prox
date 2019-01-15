@@ -82,4 +82,6 @@
     <string name="crop_image">Crop Image</string>
     <string name="session_expire">Session Expire</string>
     <string name="home">Go Home</string>
+    <string name="ok">OK</string>
+    <string name="not_authorized">Sorry! You are not authorized to use this app</string>
 </resources>

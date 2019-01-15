@@ -23,13 +23,14 @@ import com.infius.proximityuser.utilities.ApiRequestHelper;
 import com.infius.proximityuser.utilities.AppConstants;
 import com.infius.proximityuser.utilities.ProfileUtils;
 import com.infius.proximityuser.utilities.Utils;
+import com.squareup.picasso.Picasso;
 
 public class HomeActivity extends BaseDrawerActivity {
 
     FrameLayout mContentFrame;
     RelativeLayout present, upcoming, preferred, history;
     TextView addGuest, greetingMessage, propertyName;
-    ImageView profilePic;
+    ImageView profilePicHome;
     private ActionBar mActionBar;
 
     @Override
@@ -59,7 +60,7 @@ public class HomeActivity extends BaseDrawerActivity {
 
         greetingMessage = (TextView) findViewById(R.id.greeting);
         propertyName = (TextView) findViewById(R.id.property_number_home);
-        profilePic = (ImageView) findViewById(R.id.profile_pic_home);
+        profilePicHome = (ImageView) findViewById(R.id.profile_pic_home);
 
         present.setOnClickListener(this);
         preferred.setOnClickListener(this);
@@ -77,9 +78,14 @@ public class HomeActivity extends BaseDrawerActivity {
             String ownerShipType = ProfileUtils.getOwnershipType(HomeActivity.this);
             String property = ProfileUtils.getPropertyName(HomeActivity.this);
 
-            if (ProfileUtils.getProfileImageUrl(HomeActivity.this).equalsIgnoreCase("mock")) {
-                profilePic.setVisibility(View.VISIBLE);
-                profilePic.setImageResource(R.drawable.pic);
+            String url = ProfileUtils.getProfileImageUrl(HomeActivity.this);
+            if (!TextUtils.isEmpty(url)) {
+                profilePicHome.setVisibility(View.VISIBLE);
+                Picasso.with(this)
+                        .load(url)
+                        .into(profilePicHome);
+            } else {
+                profilePicHome.setVisibility(View.GONE);
             }
 
             if (!TextUtils.isEmpty(userName)) {
@@ -88,13 +94,13 @@ public class HomeActivity extends BaseDrawerActivity {
 
             if (!TextUtils.isEmpty(property)) {
                 propertyName.setVisibility(View.VISIBLE);
-                propertyName.setText(property + " (" + ownerShipType +  ")");
+                propertyName.setText(property + " (" + ownerShipType + ")");
             }
 
         } else {
             greetingMessage.setText(getString(R.string.greeting_message, ""));
             propertyName.setVisibility(View.GONE);
-            profilePic.setVisibility(View.GONE);
+            profilePicHome.setVisibility(View.GONE);
         }
     }
 

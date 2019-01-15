@@ -39,5 +39,12 @@ public interface AppConstants {
     String GUEST_LIST_PARAM_PRESENT = "PRESENT";
     String KEY_TOKEN = "token";
     String TOKEN_PREFIX = "Bearer ";
+
+    String SP_NAME = "name";
+    String SP_ROLE = "role";
+    String SP_EMAIL = "email";
+    String SP_MOBILE = "mobile";
+    String SP_SITE = "site";
+    String ROLE_RESIDENT = "resident";
 }
 

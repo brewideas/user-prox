@@ -161,7 +161,7 @@ public class Utils {
         }
     }
 
-    public static String filterMobileNumber(AddGuestActivity activity, String phoneNumber) {
+    public static String filterMobileNumber(Activity activity, String phoneNumber) {
         if (!TextUtils.isEmpty(phoneNumber)) {
             phoneNumber = phoneNumber.trim();
             int startIndex = AppConstants.START_INDEX_ZERO;
@@ -332,6 +332,26 @@ public class Utils {
                         activity.finish();
                     }
                 })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+
+    public static void showAlertDialog(Activity activity, String title, String message) {
+        AlertDialog.Builder builder;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder = new AlertDialog.Builder(activity, android.R.style.Theme_Material_Dialog_Alert);
+        } else {
+            builder = new AlertDialog.Builder(activity);
+        }
+        builder.setTitle(title)
+                .setMessage(message)
+                .setNeutralButton(activity.getString(R.string.ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setCancelable(false)
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
     }
