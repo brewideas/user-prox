@@ -32,7 +32,7 @@
         android:layout_below="@id/greeting"
         android:layout_centerHorizontal="true"
         android:text="Q-803 (Owner)"
-        android:textColor="@color/textSubTitle"
+        android:textColor="@color/textColor"
         android:textSize="@dimen/smallTextSize" />
 
     <TextView

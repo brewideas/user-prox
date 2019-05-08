@@ -143,6 +143,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     }
 
     private void fetchUserProfile() {
+        showProgressDialog();
         ApiRequestHelper.requestUserDetails(getActivity(), new Response.Listener<DataModel>() {
             @Override
             public void onResponse(DataModel response) {
