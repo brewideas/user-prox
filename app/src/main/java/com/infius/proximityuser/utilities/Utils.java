@@ -3,6 +3,7 @@ package com.infius.proximityuser.utilities;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Application;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -32,6 +33,7 @@ import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import com.infius.proximityuser.ProximityApplication;
 import com.infius.proximityuser.R;
 import com.infius.proximityuser.activities.AddGuestActivity;
 import com.infius.proximityuser.activities.AuthActivity;
@@ -50,6 +52,7 @@ import java.util.regex.Pattern;
 
 public class Utils {
     private static final int REQUEST_CODE_WRITE_EXTERNAL_STORAGE = 56;
+    private static final int REQUEST_CODE_READ_CONTACT = 57;
 
     public static boolean isValidPhoneNo(String phoneNo) {
         Pattern p = Pattern.compile(AppConstants.MOB_NO_REG_EX);
@@ -134,6 +137,11 @@ public class Utils {
 
     public static void requestWriteExternalPermission(Activity activity) {
         ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_WRITE_EXTERNAL_STORAGE);
+    }
+
+    public static void requestReadContactsPermission(Activity activity) {
+        ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_CONTACTS}, REQUEST_CODE_READ_CONTACT);
+
     }
 
     public static boolean verifyPermissions(int[] grantResults) {
@@ -355,4 +363,5 @@ public class Utils {
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
     }
+
 }

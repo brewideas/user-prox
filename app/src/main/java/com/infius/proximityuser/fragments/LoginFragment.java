@@ -12,6 +12,7 @@ import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.infius.proximityuser.R;
 import com.infius.proximityuser.activities.AddGuestActivity;
 import com.infius.proximityuser.listeners.AuthEventListener;
@@ -33,6 +35,8 @@ import com.infius.proximityuser.utilities.ApiRequestHelper;
 import com.infius.proximityuser.utilities.AppConstants;
 import com.infius.proximityuser.utilities.ProfileUtils;
 import com.infius.proximityuser.utilities.Utils;
+
+import org.json.JSONObject;
 
 public class LoginFragment extends Fragment implements View.OnClickListener {
 
@@ -154,6 +158,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                         Toast.makeText(getActivity(), getString(R.string.login_successfull), Toast.LENGTH_SHORT).show();
                         ProfileUtils.saveProfileDetails(getActivity(), profileDetails);
                         listener.onLoginSuccess();
+                        registerFCMToken();
                     } else {
                         Toast.makeText(getActivity(), "System Error : " + getString(R.string.not_authorized), Toast.LENGTH_SHORT).show();
                     }
@@ -170,6 +175,37 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         });
 
 
+    }
+
+    private void registerFCMToken() {
+        String requestBody = createRequestBody();
+        ApiRequestHelper.requestRegisterFCMDeviceToken(getContext(), requestBody, new Response.Listener<DataModel>() {
+
+            @Override
+            public void onResponse(DataModel response) {
+                Log.d("registerFCMToken", response.toString());
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getActivity(), "System Error : " + Utils.getErrorMessage(error), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private String createRequestBody() {
+        try {
+            String token = Utils.readString(getContext(), AppConstants.FCM_TOKEN);
+            JSONObject requestJson = new JSONObject();
+            requestJson.put("deviceToken", token);
+            requestJson.put("deviceOS", "ANDROID");
+
+            return requestJson.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override

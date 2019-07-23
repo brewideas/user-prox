@@ -1,6 +1,7 @@
 package com.infius.proximityuser.activities;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -77,6 +78,7 @@ public abstract class BaseDrawerActivity extends AppCompatActivity implements Vi
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
+        mDrawerToggle.getDrawerArrowDrawable().setColor(Color.WHITE);
         mDrawerToggle.syncState();
 
         initView();

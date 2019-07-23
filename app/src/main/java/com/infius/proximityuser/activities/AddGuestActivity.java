@@ -75,6 +75,9 @@ public class AddGuestActivity extends AppCompatActivity implements View.OnClickL
     private TextInputEditText inTime;
     private TextInputEditText outTime;
 
+    private TextInputEditText nameEdit;
+    private TextInputEditText mobileEdit;
+
     private TextInputLayout tilGuestName;
     private TextInputLayout tilPhone;
     private TextInputLayout tilEmail;
@@ -293,8 +296,9 @@ public class AddGuestActivity extends AppCompatActivity implements View.OnClickL
         final Spinner genderSpinner = (Spinner) otherGuestBottomSheetView.findViewById(R.id.spinner_gender);
         setSpinnerAdapter(genderSpinner, R.array.gender);
 
-        final TextInputEditText nameEdit = (TextInputEditText) otherGuestBottomSheetView.findViewById(R.id.edit_name);
-        final TextInputEditText mobileEdit = (TextInputEditText) otherGuestBottomSheetView.findViewById(R.id.edit_mobile);
+        nameEdit = (TextInputEditText) otherGuestBottomSheetView.findViewById(R.id.edit_name);
+        final ImageView contactPickerOther = (ImageView) otherGuestBottomSheetView.findViewById(R.id.contact_picker);
+        mobileEdit = (TextInputEditText) otherGuestBottomSheetView.findViewById(R.id.edit_mobile);
         final TextInputEditText ageEdit = (TextInputEditText) otherGuestBottomSheetView.findViewById(R.id.edit_age);
         final TextView addGuest = (TextView) otherGuestBottomSheetView.findViewById(R.id.btn_add_guest);
         ImageView ivClose = (ImageView) otherGuestBottomSheetView.findViewById(R.id.close);
@@ -313,6 +317,13 @@ public class AddGuestActivity extends AppCompatActivity implements View.OnClickL
                 String gender = genderSpinner.getSelectedItem().toString();
                 addGuest(name, mobile, age, gender);
                 bottomSheetDialog.dismiss();
+            }
+        });
+        contactPickerOther.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent contactPickerIntent = new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
+                startActivityForResult(contactPickerIntent, AppConstants.REQUEST_CODE_PICK_CONTACT_OTHER);
             }
         });
     }
@@ -556,12 +567,14 @@ public class AddGuestActivity extends AppCompatActivity implements View.OnClickL
             displayPic.setImageBitmap(bitmap);
             displayPic.setVisibility(View.VISIBLE);
             uploadPic.setVisibility(View.GONE);
+        } if (resultCode == RESULT_OK && requestCode == AppConstants.REQUEST_CODE_PICK_CONTACT_OTHER) {
+            contactPickedOther(data);
         }
     }
 
 
     private void contactPicked(Intent data) {
-        Cursor cursor = null;
+        Cursor cursor = null, emailCursor;
         try {
             String phoneNo = null;
             String name = null;
@@ -601,6 +614,48 @@ public class AddGuestActivity extends AppCompatActivity implements View.OnClickL
             if (Utils.isValidEmail(email)) {
                 guestEmail.setText(email);
                 guestEmail.setSelection(guestEmail.getText().length());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void contactPickedOther(Intent data) {
+        Cursor cursor = null, emailCursor;
+        try {
+            String phoneNo = null;
+            String name = null;
+            String email = null;
+            // getData() method will have the Content Uri of the selected contact
+            Uri uri = data.getData();
+            //Query the content uri
+            cursor = getContentResolver().query(uri, null, null, null, null);
+            cursor.moveToFirst();
+            // column index of the phone number
+            int phoneIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+            // column index of the contact name
+            int nameIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
+            // column index of the contact email
+            int emailIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.ADDRESS);
+
+            phoneNo = cursor.getString(phoneIndex);
+            name = cursor.getString(nameIndex);
+            email = cursor.getString(emailIndex);
+            // Set the value to the textviews
+            String filterNumber = Utils.removeSpaceAndBracket(phoneNo);
+            if (filterNumber.length() > 10)
+                filterNumber = Utils.filterMobileNumber(AddGuestActivity.this, filterNumber);
+
+            if (!TextUtils.isEmpty(name)) {
+                nameEdit.setText(name);
+                nameEdit.setSelection(nameEdit.getText().length());
+                mobileEdit.requestFocus();
+            }
+
+            if (Utils.isValidPhoneNo(filterNumber)) {
+                mobileEdit.setText(filterNumber);
+                mobileEdit.setSelection(mobileEdit.getText().length());
+                mobileEdit.requestFocus();
             }
         } catch (Exception e) {
             e.printStackTrace();

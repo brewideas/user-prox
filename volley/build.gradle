@@ -25,7 +25,7 @@ buildscript {
 }
 
 plugins {
-    id "com.github.sherter.google-java-format" version "0.6"
+    id "com.github.sherter.google-java-format" version "0.8"
     id "net.ltgt.errorprone" version "0.0.13"
 }
 
@@ -48,10 +48,6 @@ group = 'com.android.volley'
 version = '1.2.0-SNAPSHOT'
 
 android {
-
-    defaultConfig {
-        minSdkVersion = 8
-    }
     compileSdkVersion 25
     buildToolsVersion = '28.0.3'
 }

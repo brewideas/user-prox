@@ -19,6 +19,7 @@ public interface AppConstants {
     int REQUEST_CODE_PICK_CONTACT = 1001;
     int REQUEST_CODE_LOGIN = 1002;
     int REQUEST_CODE_GALLARY = 1003;
+    int REQUEST_CODE_PICK_CONTACT_OTHER = 1004;
 
 
     String SP_IS_LOGGEDIN = "is_logged_in";
@@ -46,5 +47,13 @@ public interface AppConstants {
     String SP_MOBILE = "mobile";
     String SP_SITE = "site";
     String ROLE_RESIDENT = "resident";
+
+    String DEEP_LINK_PARAM_ACTION = "action";
+    String DEEP_LINK_PARAM_ID = "id";
+    String DEEP_LINK_ACTION_1 = "1";
+    String DEEP_LINK_ACTION_2 = "2";
+    String DEEP_LINK_ACTION_3 = "3";
+
+    String FCM_TOKEN = "fcmToken";
 }
 

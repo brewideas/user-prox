@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -26,6 +27,7 @@ public class GuestListActivity extends AppCompatActivity implements View.OnClick
     private Dialog mProgressDialog;
     private ImageView backBtn, emptyList;
     private RecyclerView recyclerView;
+    private TextView toolbarView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,11 +41,23 @@ public class GuestListActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void initViews() {
+        toolbarView = (TextView) findViewById(R.id.toolbar_title);
         backBtn = (ImageView) findViewById(R.id.back_btn);
         recyclerView = (RecyclerView) findViewById(R.id.guest_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(GuestListActivity.this));
         emptyList = (ImageView) findViewById(R.id.empty_list_illustration);
         backBtn.setOnClickListener(this);
+
+        switch (mType) {
+            case AppConstants.TYPE_PRESENT:
+                toolbarView.setText(getString(R.string.present_guests));break;
+            case AppConstants.TYPE_UPCOMING:
+                toolbarView.setText(getString(R.string.upcoming_guests));break;
+            case AppConstants.TYPE_PREFERRED:
+                toolbarView.setText(getString(R.string.preferred_guest));break;
+            case AppConstants.TYPE_HISTORY:
+                toolbarView.setText(getString(R.string.history_guests));break;
+        }
     }
 
     private void fetchGuestList() {

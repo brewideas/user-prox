@@ -75,4 +75,14 @@ public class ApiRequestHelper {
         GetRequest request = new GetRequest(Request.Method.GET, url, listener, errorListener, new ProfileInfo(), header, null);
         VolleyManager.getRequestQueue(context).add(request);
     }
+
+    public static void requestRegisterFCMDeviceToken(Context context, String requestBody, Response.Listener<DataModel> listener, Response.ErrorListener errorListener) {
+        String url = "http://34.231.195.192:9090/services/proximity/api/nms/register";
+        HashMap<String, String> header = new HashMap<>();
+        header.put("Content-Type", "application/json");
+        header.put("Authorization", AppConstants.TOKEN_PREFIX + Utils.readString(context, AppConstants.KEY_TOKEN));
+
+        PostRequest request = new PostRequest(url, listener, errorListener, new InvitationModel(), header, requestBody);
+        VolleyManager.getRequestQueue(context).add(request);
+    }
 }

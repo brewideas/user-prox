@@ -84,4 +84,7 @@
     <string name="home">Go Home</string>
     <string name="ok">OK</string>
     <string name="not_authorized">Sorry! You are not authorized to use this app</string>
+
+    <string name="deep_link_scheme">u_prox</string>
+    <string name="deep_link_host">user</string>
 </resources>
